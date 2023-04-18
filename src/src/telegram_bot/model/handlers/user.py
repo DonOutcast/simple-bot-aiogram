@@ -5,6 +5,8 @@ from aiogram.types import Message
 from model.template.templates import render
 
 from model.services.categories import Categories
+
+from model.keyboards.core_buttons import menu_keyboard
 # import sys
 #
 # sys.path.append("src/onboarding/core")
@@ -17,9 +19,7 @@ headers = {"throttling_key": "default", "long_operation": "typing"}
 
 @user_router.message(CommandStart())
 async def user_start(message: Message):
-    await message.answer(text="Hello start")
-    await message.answer(text=render.render_template(template_name="user.html"))
-    print(message.location)
+    await message.answer(text=render.render_template(template_name="start.html"), reply_markup=menu_keyboard)
 
 
 @user_router.message(Command(commands="categories"), flags=headers)
