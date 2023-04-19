@@ -1,8 +1,5 @@
 from aiogram import Router, F
-from aiogram.filters import CommandStart
 from aiogram.types import Message, Location
-from aiogram.types.keyboard_button import KeyboardButton
-from aiogram.types.reply_keyboard_markup import ReplyKeyboardMarkup
 from aiogram.fsm.context import FSMContext
 
 from model.template.templates import RenderTemplate
