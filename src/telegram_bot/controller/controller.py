@@ -11,7 +11,10 @@ from configurate.config import settings
 from model.handlers.user import user_router
 from model.handlers.echo import echo_router
 from model.handlers.admin import admin_router
+from model.handlers.weather import weather_router
+from model.handlers.back_to_menu import back_to_menu_router
 from model.handlers.erro import error_router
+
 
 from model.middlewares.config import ConfigMiddleware
 from model.middlewares.throttling import ThrottlingMiddelware
@@ -51,7 +54,14 @@ class Controller(object):
         await broadcaster.broadcast(self.bot, admin_ids, "Бот запущен!")
 
     async def main(self):
-        for router in [admin_router, user_router, error_router]:
+        routers = [
+            admin_router,
+            user_router,
+            weather_router,
+            back_to_menu_router,
+            error_router,
+        ]
+        for router in routers:
             self.dp.include_router(router)
         self._register_global_middlewares(settings)
         try:

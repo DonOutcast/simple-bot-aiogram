@@ -6,18 +6,26 @@ from model.template.templates import render
 
 from model.services.categories import Categories
 
-from model.keyboards.core_buttons import menu_keyboard
-# import sys
-#
-# sys.path.append("src/onboarding/core")
+from model.keyboards.core_buttons import generate_keyboard
 
+menu_keyboard = generate_keyboard(
+    [
+        [
+            "Погода 🌤️",
+            "Валюта 💰"
+        ],
+        [
+            "Милота 🐱",
+            "Опрос 📝"
+        ],
 
-
+    ],
+)
 user_router = Router()
 headers = {"throttling_key": "default", "long_operation": "typing"}
 
 
-@user_router.message(CommandStart())
+@user_router.message(CommandStart(), flags=headers)
 async def user_start(message: Message):
     await message.answer(text=render.render_template(template_name="start.html"), reply_markup=menu_keyboard)
 

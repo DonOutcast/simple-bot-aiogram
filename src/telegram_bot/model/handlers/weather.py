@@ -18,7 +18,7 @@ weather_menu_buttons = generate_keyboard(
 
         ],
         [
-            "Вернуться в главное меню"
+            "Вернуться в главное меню 📜"
         ]
 
     ],
@@ -30,7 +30,7 @@ headers = {"throttling_key": "default", "long_operation": "typing"}
 
 @weather_router.message(F.text == "Погода 🌤️", flags=headers)
 async def weather_menu(message: Message):
-    await message.reply(
+    await message.answer(
         text=render.render_template("weather.html", {"user_name": message.from_user.first_name}),
         reply_markup=weather_menu_buttons)
 
