@@ -4,6 +4,7 @@ from aiogram import exceptions
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.fsm.storage.redis import RedisStorage
 from aiogram.types import BotCommandScopeDefault, MenuButtonWebApp, WebAppInfo
+from aiohttp import ClientTimeout
 # from aioredis import Redis
 
 from configurate.config import settings
@@ -19,6 +20,7 @@ from model.handlers.erro import error_router
 from model.middlewares.config import ConfigMiddleware
 from model.middlewares.throttling import ThrottlingMiddelware
 from model.middlewares.chataction import ChatActionMiddleware
+from model.middlewares.aiohttp import AiohttpSessionMiddleware
 
 from model.services import broadcaster
 
@@ -47,6 +49,8 @@ class Controller(object):
         self.__initialized = True
 
     def _register_global_middlewares(self, config: settings):
+        aiohttp_session_timeout = ClientTimeout(total=1, connect=5)
+        self.dp.update.middleware(AiohttpSessionMiddleware(aiohttp_session_timeout))
         self.dp.message.middleware(ChatActionMiddleware())
         self.dp.message.outer_middleware(ConfigMiddleware(config))
 
