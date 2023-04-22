@@ -37,6 +37,6 @@ async def cmd_cancel_registration(message: types.Message, state: FSMContext):
         await message.answer('Вы вернулись в главное меню', reply_markup=menu_keyboard)
         await message.answer_sticker(sticker="CAACAgIAAxkBAAENm1Bi_0Q9YClvUdjgvDLx0S5V3Z3UUgAClgcAAmMr4glEcXCvl0uDLSkE")
         return
-    await state.finish()
+    await state.clear()
     await message.answer('Вы вернулись в главное меню', reply_markup=menu_keyboard)
     await message.answer_sticker(sticker="CAACAgIAAxkBAAENm1Bi_0Q9YClvUdjgvDLx0S5V3Z3UUgAClgcAAmMr4glEcXCvl0uDLSkE")

@@ -1,5 +1,3 @@
-import json
-import asyncio
 from aiohttp import ClientSession, ClientTimeout
 from aiogram import BaseMiddleware
 from aiogram.types import TelegramObject
@@ -20,5 +18,6 @@ class AiohttpSessionMiddleware(BaseMiddleware):
             data: Dict[str, Any],
     ) -> Any:
         async with ClientSession(timeout=self.aiohttp_session_timeout) as aiohttp_session:
+            aiohttp_session.connector._ssl = False
             data["aiohttp_session"] = aiohttp_session
             return await handler(event, data)

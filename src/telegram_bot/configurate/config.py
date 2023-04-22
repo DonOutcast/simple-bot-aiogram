@@ -34,6 +34,8 @@ class Settings(BaseSettings):
     bot_name: str
     admins: list[int]
 
+    openweather_token: SecretStr
+
     container_name: str = Field(..., env="BOT_CONTAINER_NAME")
     image: str = Field(..., env="BOT_IMAGE_NAME")
 
