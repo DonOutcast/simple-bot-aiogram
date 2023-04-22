@@ -1,8 +1,5 @@
 from aiogram import Router, F, types
 from aiogram.fsm.context import FSMContext
-from aiogram.types import Message
-from aiogram.filters import CommandStart, Command
-
 from model.template.templates import render
 from model.keyboards.core_buttons import generate_keyboard
 
@@ -34,9 +31,9 @@ async def cmd_cancel_registration(message: types.Message, state: FSMContext):
         pass
     current_state = await state.get_state()
     if current_state is None:
-        await message.answer('Вы вернулись в главное меню', reply_markup=menu_keyboard)
+        await message.answer(text=render.render_template(template_name="back_menu.html"), reply_markup=menu_keyboard)
         await message.answer_sticker(sticker="CAACAgIAAxkBAAENm1Bi_0Q9YClvUdjgvDLx0S5V3Z3UUgAClgcAAmMr4glEcXCvl0uDLSkE")
         return
     await state.clear()
-    await message.answer('Вы вернулись в главное меню', reply_markup=menu_keyboard)
+    await message.answer(text=render.render_template(template_name="back_menu.html"), reply_markup=menu_keyboard)
     await message.answer_sticker(sticker="CAACAgIAAxkBAAENm1Bi_0Q9YClvUdjgvDLx0S5V3Z3UUgAClgcAAmMr4glEcXCvl0uDLSkE")

@@ -5,11 +5,14 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from aiohttp import ClientTimeout
 
 from configurate.config import settings
+
 from model.handlers.user import user_router
 from model.handlers.admin import admin_router
 from model.handlers.weather import weather_router
 from model.handlers.back_to_menu import back_to_menu_router
+from model.handlers.currency import currency_router
 from model.handlers.erro import error_router
+
 from model.middlewares.config import ConfigMiddleware
 from model.middlewares.throttling import ThrottlingMiddelware
 from model.middlewares.chataction import ChatActionMiddleware
@@ -51,6 +54,7 @@ class Controller(object):
             user_router,
             back_to_menu_router,
             weather_router,
+            currency_router,
             error_router,
         ]
         for router in routers:
