@@ -10,23 +10,11 @@ from pydantic import BaseSettings, validator, SecretStr, RedisDsn, PostgresDsn, 
 load_dotenv()
 
 TELEGRAM_BOT_TOKEN = os.getenv("BOT_TOKEN", "")
-# TELEGRAM_BOTANIM_CHANNEL_ID = int(os.getenv("TELEGRAM_BOTANIM_CHANNEL_ID", "0"))
 
 
 BASE_DIR = Path(__file__).absolute().parent.parent
-# SQLITE_DB_FILE = BASE_DIR / "db.sqlite3"
 TEMPLATES_DIR = BASE_DIR / "templates"
 DATABASE_DIR = BASE_DIR / "databases/database.db"
-# CONFIGURATE_DIR = BASE_DIR / "configurate/log_config.json"
-
-
-# DATE_FORMAT = "%d.%m.%Y"
-# VOTE_ELEMENTS_COUNT = 3
-
-# VOTE_RESULTS_TOP = 10
-
-# ALL_BOOKS_CALLBACK_PATTERN = "all_books_"
-# VOTE_BOOKS_CALLBACK_PATTERN = "vote_"
 
 
 class Settings(BaseSettings):
