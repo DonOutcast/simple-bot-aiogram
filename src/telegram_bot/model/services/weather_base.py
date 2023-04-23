@@ -15,7 +15,6 @@ def get_weather(response_json: json) -> Weather:
     return weather
 
 
-
 def _parse_openweather_response(open_weather_response: json) -> Weather:
     return Weather(
         temperature=_parse_temperature(open_weather_response),

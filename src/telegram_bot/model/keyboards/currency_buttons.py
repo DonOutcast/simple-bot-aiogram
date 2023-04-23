@@ -1,4 +1,3 @@
-from datetime import datetime
 from bs4 import BeautifulSoup
 from aiohttp import ClientSession
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
@@ -35,10 +34,6 @@ def create_currency_keyboard(
 
 async def get_currency_markup(aiohttp_session: ClientSession, currency_index: int,
                               page_size: int = 15) -> InlineKeyboardMarkup:
-    url = "http://www.cbr.ru/scripts/XML_daily.asp?"
-    today = datetime.today()
-    today = today.strftime("%d/%m/%Y")
-    url += "date_req?=" + str(today)
-    soup: BeautifulSoup = await fetch_xml(aiohttp_session, url)
+    soup: BeautifulSoup = await fetch_xml(aiohttp_session)
     currency_list: list = get_all_currency(soup)
     return create_currency_keyboard(currency_index=currency_index, names_of_currency=currency_list, page_size=page_size)

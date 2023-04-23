@@ -6,6 +6,9 @@ BOT_NAME=mybotname
 ## Admins id
 ADMINS=[1134902789, 1]
 
+# OpenWeather Token
+OPENWEATHER_TOKEN=Your Token
+
 # Docker Compose settings
 ## Container name
 BOT_CONTAINER_NAME=bot_container_name

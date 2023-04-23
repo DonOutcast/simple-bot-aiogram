@@ -14,7 +14,6 @@ class ChatActionMiddleware(BaseMiddleware):
         data: Dict[str, Any]
     ) -> Any:
         long_operation_type = get_flag(data, "long_operation")
-        print(f"long_opertation_type {long_operation_type}")
         # Если такого флага на хэндлере нет
         if not long_operation_type:
             return await handler(event, data)

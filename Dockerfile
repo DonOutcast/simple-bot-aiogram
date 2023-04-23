@@ -21,6 +21,6 @@ COPY src/telegram_bot src
 USER nobody:nogroup
 HEALTHCHECK --interval=30s --timeout=5s \
   CMD curl -f http://localhost:5000/ || exit 1
-#CMD sudo chmod a+rwx debug.log
+
 CMD ["python3", "-u", "src/__main__.py"]
-#CMD ["ls"]
+
