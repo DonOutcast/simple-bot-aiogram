@@ -1,16 +1,18 @@
-from typing import Optional
-
 from aiogram import Router, F
-from aiogram.types import Message, Location
 from aiogram.fsm.context import FSMContext
+from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup
+
+from bs4 import BeautifulSoup
 from aiohttp import ClientSession
+from datetime import datetime
 
 from model.template.templates import RenderTemplate
-from model.fsm.coordinates import CoordinatesStates
 from model.keyboards.core_buttons import generate_keyboard
-from model.services.crud_openweather import fetch_json
-from model.services.weather_help import Coordinates, Weather
-from model.services.weather_base import get_weather
+from model.services.crud_currency import fetch_xml
+from model.services.currency_base import get_all_currency, get_course
+from model.keyboards.currency_buttons import get_currency_markup
+from model.call_back_data.call_back_data_currency import ChangePage, CourseCurrency
+from model.fsm.currency import CurrencyStates
 
 render = RenderTemplate()
 
@@ -41,50 +43,48 @@ async def currency_menu(message: Message):
 
 
 @currency_router.message(F.text == "Курс 💵💶")
-async def get_today_currency(message: Message):
+async def get_today_currency(message: Message, aiohttp_session: ClientSession):
+    url = "http://www.cbr.ru/scripts/XML_daily.asp?"
+    today = datetime.today()
+    today = today.strftime("%d/%m/%Y")
+    url += "date_req?=" + str(today)
+    res = await fetch_xml(aiohttp_session, url)
+    res_1 = get_all_currency(res)
+    # await message.answer(text="s", reply_markup=get_currency_keyboard(0, "all_currency_", res_1))
 
-    await message.answer(text=render.render_template())
+
+@currency_router.message(F.text == "Конвертировать 🧾")
+async def cmd_convector_currency(message: Message, aiohttp_session: ClientSession, state: FSMContext):
+    markup = await get_currency_markup(aiohttp_session, 0)
+    await message.answer(text=render.render_template("convector_currency.html"),
+                         reply_markup=markup)
 
 
-# @weather_router.message(F.location)
-# async def location_admin(message: Message, state: FSMContext, aiohttp_session: ClientSession):
-#     await state.set_state(CoordinatesStates.longitude)
-#     await state.update_data(longitude=message.location.longitude)
-#     await state.set_state(CoordinatesStates.latitude)
-#     await state.update_data(latitude=message.location.latitude)
-#     data: dict = await state.get_data()
-#     result: Optional[Weather] = await get_weather_result(data, aiohttp_session)
-#     await message.answer(text=render.render_template("format_weather.html", {"weather": result}))
-#     await state.clear()
-#
-#
-# @weather_router.message(F.text == "Координаты")
-# async def cmd_coordinates(message: Message, state: FSMContext):
-#     await state.set_state(CoordinatesStates.latitude)
-#     await message.answer(render.render_template("latitude.html"))
-#
-#
-# @weather_router.message(CoordinatesStates.latitude)
-# async def latitude_function(message: Message, state: FSMContext):
-#     if check_coordinates(message.text):
-#         await state.update_data(latitude=message.text)
-#         await message.answer(render.render_template("longitude.html"))
-#         await state.set_state(CoordinatesStates.longitude)
-#     else:
-#         await message.delete()
-#         await message.answer(render.render_template("latitude.html"))
-#         await state.set_state(CoordinatesStates.latitude)
-#
-#
-# @weather_router.message(CoordinatesStates.longitude)
-# async def longitude_function(message: Message, state: FSMContext, aiohttp_session: ClientSession):
-#     if check_coordinates(message.text):
-#         await state.update_data(longitude=message.text)
-#         data = await state.get_data()
-#         result: Optional[Weather] = await get_weather_result(data, aiohttp_session)
-#         await message.answer(text=render.render_template("format_weather.html", {"weather": result}))
-#         await state.clear()
-#     else:
-#         await message.delete()
-#         await message.answer(render.render_template("longitude.html"))
-#         await state.set_state(CoordinatesStates.longitude)
+@currency_router.callback_query(ChangePage.filter())
+async def all_currency(query: CallbackQuery, callback_data: ChangePage, aiohttp_session: ClientSession):
+    markup = await get_currency_markup(aiohttp_session, callback_data.page)
+    await query.message.delete()
+    await query.message.answer(text=render.render_template("convector_currency.html"),
+                               reply_markup=markup)
+
+
+@currency_router.callback_query(CourseCurrency.filter())
+async def start_convector(query: CallbackQuery, callback_data: CourseCurrency, state: FSMContext,
+                          aiohttp_session: ClientSession):
+    await state.set_state(CurrencyStates.currency)
+    url = "http://www.cbr.ru/scripts/XML_daily.asp?"
+    today = datetime.today()
+    today = today.strftime("%d/%m/%Y")
+    url += "date_req?=" + str(today)
+    res = await fetch_xml(aiohttp_session, url)
+    await state.update_data(currency=get_course(res, callback_data.name))
+    await state.set_state(CurrencyStates.count)
+    await query.message.answer(text=render.render_template("count_money.html"))
+
+
+@currency_router.message(CurrencyStates.count)
+async def end_convector(message: Message, state: FSMContext):
+    await state.update_data(count=float(message.text))
+    data = await state.get_data()
+    await message.answer(text=f"{round(data.get('count') / data.get('currency'), 2)}")
+    await state.clear()
