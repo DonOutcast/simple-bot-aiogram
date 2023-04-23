@@ -9,6 +9,7 @@
 <ul>
  <li>Написан на языке Python3.10</li>
  <li>При помоши фраймворка aiogrm3.x</li>
+</ul>
 <h4>Основной стек технологий:</h4>
 <ul>
     <li>Python, Aiogram, Asyncio</li>
