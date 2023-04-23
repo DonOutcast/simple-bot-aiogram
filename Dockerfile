@@ -5,7 +5,7 @@ ENV PYTHONUNBUFFERED=1
 ENV PIP_DISABLE_PIP_VERSION_CHECK 1
 
 WORKDIR /code
-ADD tg_bot-requirements.txt requirements.txt
+ADD requirements.txt requirements.txt
 RUN python -m venv /opt/venv
 
 RUN pip config set global.trusted-host "pypi.org files.pythonhosted.org pypi.python.org"
