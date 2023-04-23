@@ -11,6 +11,7 @@ from model.handlers.admin import admin_router
 from model.handlers.weather import weather_router
 from model.handlers.back_to_menu import back_to_menu_router
 from model.handlers.currency import currency_router
+from model.handlers.cat import cat_router
 from model.handlers.erro import error_router
 
 from model.middlewares.config import ConfigMiddleware
@@ -55,6 +56,7 @@ class Controller(object):
             back_to_menu_router,
             weather_router,
             currency_router,
+            cat_router,
             error_router,
         ]
         for router in routers:
