@@ -12,10 +12,10 @@ from model.handlers.weather import weather_router
 from model.handlers.back_to_menu import back_to_menu_router
 from model.handlers.currency import currency_router
 from model.handlers.cat import cat_router
+from model.handlers.poll import poll_router
 from model.handlers.erro import error_router
 
 from model.middlewares.config import ConfigMiddleware
-from model.middlewares.throttling import ThrottlingMiddelware
 from model.middlewares.chataction import ChatActionMiddleware
 from model.middlewares.aiohttp import AiohttpSessionMiddleware
 from model.services import broadcaster
@@ -24,7 +24,6 @@ from model.commnad_scope.scopes import SetCommands
 
 class Controller(object):
     __instance = None
-
     bot = Bot(settings.bot_token.get_secret_value(), parse_mode="HTML")
     storage = MemoryStorage
     dp = Dispatcher()
@@ -50,6 +49,7 @@ class Controller(object):
         await broadcaster.broadcast(self.bot, admin_ids, "Бот запущен!")
 
     async def main(self):
+
         routers = [
             admin_router,
             user_router,
@@ -57,6 +57,7 @@ class Controller(object):
             weather_router,
             currency_router,
             cat_router,
+            poll_router,
             error_router,
         ]
         for router in routers:

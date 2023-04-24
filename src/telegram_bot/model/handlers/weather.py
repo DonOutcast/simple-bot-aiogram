@@ -1,7 +1,7 @@
 from typing import Optional
 
 from aiogram import Router, F
-from aiogram.types import Message, Location
+from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 from aiohttp import ClientSession
 

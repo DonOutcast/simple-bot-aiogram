@@ -28,6 +28,6 @@ error_router = Router()
         ),
     flags={"long_operation": "typing"}
     )
-async def erro_message(message: Message, contetn_types=ContentType.ANY):
+async def error_message(message: Message):
     await message.delete()
     await message.answer(text=render.render_template("error.html", {"user_name": message.from_user.first_name}))
